@@ -1,0 +1,38 @@
+<!doctype html>
+
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+
+  <title>Chart.js Boxplot-chart</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <meta name="description" content="Chart.js Boxplot-chart">
+  <meta name="author" content="Minkyu Jason Kim">
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
+  <script type="text/javascript" src="chart.js"></script>
+</head>
+
+<body>
+  <div>
+    <canvas id="chart"></canvas>
+  </div>
+
+  <script>
+  function getDummy() {
+    var labels = [ 'data1', 'data2' ];
+    var data = [
+      { MIN: 10, Q1: 20, Q2: 40, Q3: 70, MAX: 150 },
+      { MIN: 20, Q1: 50, Q2: 70, Q3: 100, MAX: 130 }
+    ];
+
+    return { labels: labels, data: data };
+  }
+
+  window.onload = function() {
+    var dummy = getDummy();
+    Boxplot.print('chart', dummy.data, dummy.labels);
+  }
+  </script>
+</body>
+</html>
