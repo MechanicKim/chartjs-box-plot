@@ -169,6 +169,7 @@ var Boxplot = {
 	        xAxes: [
 						{
 							gridLines: { display:false },
+							barPercentage: 0.7,
 		          stacked: true,
 		        }
 					],
