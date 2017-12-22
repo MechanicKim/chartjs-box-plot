@@ -3,17 +3,13 @@ var Boxplot = {
 	data: [],
 
 	backgroundColor: [
-		'rgba(255, 255, 255, 0)',		// 0 ~ MIN
-		'rgba(255, 255, 255, 0)',		// MIN ~ Q1
-
-		'rgba(255, 170, 0, 1)',		// Q1 ~ Q2
-		'rgba(255, 170, 0, 1)',		// Q2 ~ Q3
-
-		'rgba(255, 255, 255, 0)'		// Q3 ~ MAX
+		'rgba(255, 170, 0, 1)',
+		'rgba(75, 192, 192, 1)',
 	],
 
 	barColor: 'rgba(201, 203, 207, 1)',
 	dotColor: 'rgba(201, 203, 207, 1)',
+
 	q2LineColor: 'rgba(54, 162, 235, 1)',
 
 	custom: Chart.controllers.bar.extend({
@@ -69,20 +65,30 @@ var Boxplot = {
 	}),
 
 	createDataset: function(colorIndex, data) {
+		var backgroundColor = 'rgba(255, 255, 255, 0)';
+		if (colorIndex === 2 || colorIndex === 3) {
+			backgroundColor = Boxplot.backgroundColor;
+		}
+
 		return {
-			backgroundColor: Boxplot.backgroundColor[colorIndex],
+			backgroundColor: backgroundColor,
 			data: data
 		};
 	},
 
 	update: function() {
+		var max = 0;
 		Boxplot.data.forEach(function(d, i) {
 			Boxplot.chart.data.datasets[i].data[0] = d.MIN;
 			Boxplot.chart.data.datasets[i].data[1] = d.Q1 - d.MIN;
 			Boxplot.chart.data.datasets[i].data[2] = d.Q2 - d.Q1;
 			Boxplot.chart.data.datasets[i].data[3] = d.Q3 - d.Q2;
 			Boxplot.chart.data.datasets[i].data[4] = d.MAX - d.Q3;
+
+			max = max < d.MAX ? d.MAX : max;
 		});
+
+		Boxplot.chart.options.scales.yAxes.ticks.max = max * 0.1;
 
 		Boxplot.chart.update();
 	},
@@ -95,6 +101,7 @@ var Boxplot = {
 			return;
 		}
 
+		var max = 0;
 		var datasets = [];
 		var datasetData = [ [], [], [], [], [] ];
 		Boxplot.data.forEach(function(d, i) {
@@ -103,6 +110,8 @@ var Boxplot = {
 			datasetData[2].push(d.Q2 - d.Q1);
 			datasetData[3].push(d.Q3 - d.Q2);
 			datasetData[4].push(d.MAX - d.Q3);
+
+			max = max < d.MAX ? d.MAX : max;
 		});
 
 		for (var i = 0; i < 5; i++) {
@@ -180,6 +189,7 @@ var Boxplot = {
 								drawBorder: false
 							},
 							ticks: {
+								max: max + (max * 0.1),
 								min: 0,
 								display: false
 							},
